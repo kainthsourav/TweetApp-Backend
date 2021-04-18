@@ -1,7 +1,5 @@
 package com.example.model;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,15 +11,22 @@ public class Users {
 
     @Id
     private String emailId;
-    private String password;
+    private String loginId;
     private String firstName;
     private String lastName;
-    private String gender;
-    private String dateOfBirth;
+    private String password;
     private Boolean loggedIn;
 
     @DBRef
     private List<Tweet> tweets;
+
+    public String getLoginId() {
+        return loginId;
+    }
+
+    public void setLoginId(String loginId) {
+        this.loginId = loginId;
+    }
 
     public Boolean getLoggedIn() {
         return loggedIn;
@@ -32,22 +37,6 @@ public class Users {
     }
 
     public Users() {}
-
-    public Users(String emailId){
-        this.emailId = emailId;
-    }
-
-    public Users(String emailId, String firstName, String lastName, String gender, String birthDate,
-                 String passwordKey, Boolean loggedIn) {
-        super();
-        this.emailId = emailId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.gender = gender;
-        this.dateOfBirth = birthDate;
-        this.password = passwordKey;
-        this.loggedIn = loggedIn;
-    }
 
     public String getEmailId() {
         return emailId;
@@ -81,22 +70,6 @@ public class Users {
         this.lastName = lastName;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
     public List<Tweet> getTweets() {
         return tweets;
     }
@@ -105,11 +78,20 @@ public class Users {
         this.tweets = tweets;
     }
 
+    public Users(String emailId, String loginId, String firstName, String lastName, String password, Boolean loggedIn, List<Tweet> tweets) {
+        this.emailId = emailId;
+        this.loginId = loginId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.loggedIn = loggedIn;
+        this.tweets = tweets;
+    }
+
     @Override
     public String toString() {
         return "User = [emailId=" + emailId + ", firstName=" + firstName + ", lastName=" + lastName + ", gender="
-                + gender + ", birthDate=" + dateOfBirth + ", passwordKey=" + password + "]";
+                + ", tweetDate=" + ", passwordKey=" + password + "]";
     }
-
 
 }

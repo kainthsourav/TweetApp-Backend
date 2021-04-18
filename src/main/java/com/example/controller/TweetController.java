@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("/api/v1.0/tweets")
 public class TweetController {
@@ -22,6 +24,7 @@ public class TweetController {
     public ResponseEntity<?> newTweet(@RequestBody Tweet tweet){
         try {
             if (userRepo.existsById(tweet.getEmailId())){
+                tweet.setDateOfTweet(new Date(System.currentTimeMillis()));
                 tweetRepo.save(tweet);
                 return new ResponseEntity<Tweet>(tweet, HttpStatus.OK);
             }else{
@@ -32,14 +35,25 @@ public class TweetController {
         }
     }
 
+    //Get Tweets for specific individual
     @GetMapping("/tweets/{id}")
-    public ResponseEntity<?> getAllTweets(@PathVariable("id") String userName){
+    public ResponseEntity<?> getSpecificTweets(@PathVariable("id") String userName){
         try {
             if (userRepo.existsById(userName)){
                 return new ResponseEntity<>(tweetRepo.findAll(), HttpStatus.OK);
             }else{
                 throw new Exception(userName + " Does not exists in the database");
             }
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //Get All Tweets
+    @GetMapping("/tweets")
+    public ResponseEntity<?> getAllTweets(){
+        try {
+            return new ResponseEntity<>(tweetRepo.findAll(), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

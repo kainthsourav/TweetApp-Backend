@@ -1,11 +1,10 @@
 package com.example.repository;
 
 import com.example.model.Tweet;
-import com.example.model.Users;
+import com.example.model.TweetReply;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import java.util.List;
+public interface TweetReplyRepository extends MongoRepository<TweetReply, String> {
 
-public interface TweetRepository extends MongoRepository<Tweet, String> {
 
 }

@@ -4,22 +4,32 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.List;
 
 @Document(collection = "tweet")
 public class Tweet {
 
     @Id
+    private String id;
     private String emailId;
     private String tweetMessage;
-    private Date dateOfTweet;
+    private String dateOfTweet;
 
-    public Tweet(){
+    public Tweet(){}
 
+    public Tweet(String id, String emailId, String tweetMessage, String dateOfTweet) {
+        this.id = id;
+        this.emailId = emailId;
+        this.tweetMessage = tweetMessage;
+        this.dateOfTweet = dateOfTweet;
     }
-    public Tweet(String email_id, String tweet_description, Date tweetDate) {
-        this.emailId = email_id;
-        this.tweetMessage = tweet_description;
-        this.dateOfTweet = tweetDate;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getEmailId() {
@@ -38,11 +48,11 @@ public class Tweet {
         this.tweetMessage = tweetMessage;
     }
 
-    public Date getDateOfTweet() {
+    public String getDateOfTweet() {
         return dateOfTweet;
     }
 
-    public void setDateOfTweet(Date dateOfTweet) {
+    public void setDateOfTweet(String dateOfTweet) {
         this.dateOfTweet = dateOfTweet;
     }
 

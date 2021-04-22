@@ -10,12 +10,13 @@ import java.util.List;
 public class Users {
 
     @Id
+    private String id;
     private String emailId;
     private String loginId;
     private String firstName;
     private String lastName;
     private String password;
-    private Boolean loggedIn;
+    private String contactNo;
 
     @DBRef
     private List<Tweet> tweets;
@@ -28,12 +29,12 @@ public class Users {
         this.loginId = loginId;
     }
 
-    public Boolean getLoggedIn() {
-        return loggedIn;
+    public String getContactNo() {
+        return contactNo;
     }
 
-    public void setLoggedIn(Boolean loggedIn) {
-        this.loggedIn = loggedIn;
+    public void setContactNo(String contactNo) {
+        this.contactNo = contactNo;
     }
 
     public Users() {}
@@ -78,14 +79,19 @@ public class Users {
         this.tweets = tweets;
     }
 
-    public Users(String emailId, String loginId, String firstName, String lastName, String password, Boolean loggedIn, List<Tweet> tweets) {
+    public Users(String emailId, String loginId, String firstName, String lastName, String password, String contactNo, List<Tweet> tweets) {
         this.emailId = emailId;
         this.loginId = loginId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
-        this.loggedIn = loggedIn;
+        this.contactNo = contactNo;
         this.tweets = tweets;
+    }
+
+    public Users(String loginId, String password) {
+        this.loginId = loginId;
+        this.password = password;
     }
 
     @Override

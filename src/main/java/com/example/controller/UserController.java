@@ -18,35 +18,57 @@ public class UserController {
     private UserRepository userRepo;
 
     @PostMapping("/register")
-    public ResponseEntity<?> newUser(@RequestBody Users user){
+    public ResponseEntity<?> newUser(@RequestBody Users user) {
         try {
-            System.out.println("hi");
-//            user.setDateOfBirth(new Date(System.currentTimeMillis()));
-            userRepo.save(user);
-            return new ResponseEntity<Users>(user, HttpStatus.OK);
-        }catch (Exception e){
+            System.out.println(user.toString());
+            if(userRepo.existsByLoginId(user.getLoginId())){
+                throw new Exception("user with " + user.getLoginId() + " already presents");
+            }else{
+                userRepo.save(user);
+                return new ResponseEntity<Users>(user, HttpStatus.OK);
+            }
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getSingleUser(@PathVariable("id") String userName) {
-        Optional<Users> singleUser = userRepo.findById(userName);
-        if (singleUser.isPresent()){
-            return new ResponseEntity<>(singleUser.get(), HttpStatus.OK);
-        }else{
+
+        Users singleUser = userRepo.findByLoginId(userName);
+        System.out.println(singleUser.getLoginId() + "-----------------------------------------------------------------------------");
+        if (singleUser != null) {
+            singleUser.toString();
+            return new ResponseEntity<Users>(singleUser, HttpStatus.OK);
+        } else {
             return new ResponseEntity<>("User not found with id " + userName, HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/user")
-    public ResponseEntity<?> getAllUsers(){
-        System.out.println("hi");
+    public ResponseEntity<?> getAllUsers() {
         List<Users> allUsers = userRepo.findAll();
-        if (allUsers.size() > 0){
+        if (allUsers.size() > 0) {
             return new ResponseEntity<List<Users>>(allUsers, HttpStatus.OK);
-        }else{
+        } else {
             return new ResponseEntity<>("No Users Available", HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody Users user) {
+        String tempLoginId = user.getLoginId();
+        String tempPassword = user.getPassword();
+        try {
+            Users tempUser = new Users();
+            tempUser = userRepo.findByLoginId(tempLoginId);
+            if (tempUser.getPassword().equalsIgnoreCase(tempPassword)){
+                return new ResponseEntity<Users>(tempUser, HttpStatus.OK);
+            }else{
+                throw new Exception("Password is incorrect");
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+}

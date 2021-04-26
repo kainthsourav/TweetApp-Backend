@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface TweetRepository extends MongoRepository<Tweet, String> {
-
+public interface TweetRepository extends MongoRepository<Tweet, Integer> {
+    Tweet findById(int id);
+    List<Tweet> findByIsOriginalTweet(boolean isOriginal);
 }

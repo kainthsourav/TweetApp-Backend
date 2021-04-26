@@ -1,35 +1,43 @@
 package com.example.model;
 
+import org.bson.codecs.AtomicIntegerCodec;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Document(collection = "tweet")
 public class Tweet {
 
+    private static final AtomicInteger count = new AtomicInteger(0);
+
     @Id
-    private String id;
+    private int id;
     private String emailId;
     private String tweetMessage;
+    private boolean isOriginalTweet;
     private String dateOfTweet;
+    private List<Integer> tweetReply = new ArrayList<Integer>();
 
-    public Tweet(){}
+    public Tweet(){
+        this.id = count.incrementAndGet();
+    }
 
-    public Tweet(String id, String emailId, String tweetMessage, String dateOfTweet) {
+    public Tweet(int id, String emailId, String tweetMessage, boolean isOriginalTweet, String dateOfTweet, List<Integer> tweetReply) {
         this.id = id;
         this.emailId = emailId;
         this.tweetMessage = tweetMessage;
+        this.isOriginalTweet = isOriginalTweet;
         this.dateOfTweet = dateOfTweet;
+        this.tweetReply = tweetReply;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getEmailId() {
@@ -56,4 +64,19 @@ public class Tweet {
         this.dateOfTweet = dateOfTweet;
     }
 
+    public boolean isOriginalTweet() {
+        return isOriginalTweet;
+    }
+
+    public void setOriginalTweet(boolean originalTweet) {
+        this.isOriginalTweet = originalTweet;
+    }
+
+    public List<Integer> getTweetReply() {
+        return tweetReply;
+    }
+
+    public void setTweetReply(int tweetReply) {
+        this.tweetReply.add(tweetReply);
+    }
 }

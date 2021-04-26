@@ -20,7 +20,6 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> newUser(@RequestBody Users user) {
         try {
-            System.out.println(user.toString());
             if(userRepo.existsByLoginId(user.getLoginId())){
                 throw new Exception("user with " + user.getLoginId() + " already presents");
             }else{
@@ -36,7 +35,6 @@ public class UserController {
     public ResponseEntity<?> getSingleUser(@PathVariable("id") String userName) {
 
         Users singleUser = userRepo.findByLoginId(userName);
-        System.out.println(singleUser.getLoginId() + "-----------------------------------------------------------------------------");
         if (singleUser != null) {
             singleUser.toString();
             return new ResponseEntity<Users>(singleUser, HttpStatus.OK);
@@ -67,6 +65,18 @@ public class UserController {
             }else{
                 throw new Exception("Password is incorrect");
             }
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/updatePassword")
+    public ResponseEntity<?> updatePassword(@RequestBody Users user) {
+        try {
+                Users olduser = userRepo.findByLoginId(user.getLoginId());
+                olduser.setPassword(user.getPassword());
+                userRepo.save(olduser);
+                return new ResponseEntity<Users>(user, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
